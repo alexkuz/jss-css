@@ -22,6 +22,9 @@ import useSheet from 'react-jss';
     border-left: 1px solid #DDD;
   }
 `)
+class Cell extends Component {
+  ...
+}
 ```
 
 or:
@@ -38,6 +41,9 @@ import useSheet from 'jss-css/lib/useSheet';
     border-left: 1px solid #DDD;
   }
 `)
+class Cell extends Component {
+  ...
+}
 ```
 
 These css declarations will be converted into JSS object:
@@ -73,6 +79,9 @@ import useSheet from 'jss-css/lib/useSheet';
     border-left: 1px solid #DDD;
   }
 `)
+class Cell extends Component {
+  ...
+}
 ```
 
 **Note**: in this case, you cannot use variables in the template string (at least for now).
