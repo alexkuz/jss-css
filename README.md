@@ -75,3 +75,4 @@ import useSheet from 'jss-css/lib/useSheet';
 `)
 ```
 
+**Note**: in this case, you cannot use variables in the template string (at least for now).
