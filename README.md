@@ -1,6 +1,6 @@
 # jss-css
 
-This is a convenience module for [JSS](https://github.com/jsstyles/jss) that converts CSS string into JSS module. It allows to describe style classes for components in a habitual and little less verbose way.
+This is a convenience module for [JSS](https://github.com/jsstyles/jss) that converts CSS string into JSS object. It allows to describe style classes for components in a habitual and little less verbose way.
 
 ## Installation
 ```
