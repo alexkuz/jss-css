@@ -2,6 +2,11 @@
 
 This is a convenience module for [JSS](https://github.com/jsstyles/jss) that converts CSS string into JSS module. It allows to describe style classes for components in a habitual and little less verbose way.
 
+## Installation
+```
+npm i -S jss-css
+```
+
 ## Examples
 
 ```
