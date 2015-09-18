@@ -6,13 +6,16 @@ function getStyles(rule) {
   return mapValues(rule.style._importants, (val, key) => rule.style[key]);
 }
 
-function replaceSelector(cssRule, sel) {
+function replaceSelector(cssRule, sel, options) {
   const isPureClassName = /^[\.\w\-]+$/.test(sel);
   if (!isPureClassName) {
-    const className = sel.match(/(\.?[\w\-]+)/)[1];
+    let className = sel.match(/(\.?[\w\-]+)/)[1];
     const classNameRe = new RegExp(className.replace('.', '\\.'), 'g');
+    if (options.named !== true) {
+      className = className.replace(/^\./, '');
+    }
 
-    return [className.replace(/^\./, ''), {
+    return [className, {
       [sel.replace(classNameRe, '&')]: getStyles(cssRule)
     }];
   }
@@ -20,11 +23,11 @@ function replaceSelector(cssRule, sel) {
   return [ sel.replace(/^\./, ''), getStyles(cssRule) ];
 }
 
-export default function cssToJss(str) {
+export default function cssToJss(str, options) {
   const keyValues = [
     for (cssRule of cssom.parse(str).cssRules)
       for (sel of cssRule.selectorText.split(/\s*,\s*/))
-        replaceSelector(cssRule, sel)
+        replaceSelector(cssRule, sel, options)
   ];
 
   return reduce(keyValues, (obj, keyVal) => ({
