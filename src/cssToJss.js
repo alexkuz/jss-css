@@ -11,7 +11,7 @@ function replaceSelector(cssRule, sel, options) {
   if (!isPureClassName) {
     let className = sel.match(/(\.?[\w\-]+)/)[1];
     const classNameRe = new RegExp(className.replace('.', '\\.'), 'g');
-    if (options.named !== true) {
+    if (options.named !== false) {
       className = className.replace(/^\./, '');
     }
 
