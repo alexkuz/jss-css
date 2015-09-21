@@ -1,6 +1,5 @@
 import mapValues from 'lodash/object/mapValues';
 import cssom from 'cssom';
-import reduce from 'lodash/collection/reduce';
 
 function getStyles(rule) {
   return mapValues(rule.style._importants, (val, key) => rule.style[key]);
@@ -24,14 +23,45 @@ function replaceSelector(cssRule, sel, options) {
 }
 
 export default function cssToJss(str, options) {
-  const keyValues = [
-    for (cssRule of cssom.parse(str).cssRules)
-      for (sel of cssRule.selectorText.split(/\s*,\s*/))
-        replaceSelector(cssRule, sel, options)
-  ];
+  const cssRules = cssom.parse(str).cssRules;
 
-  return reduce(keyValues, (obj, keyVal) => ({
-    ...obj,
-    [keyVal[0]]: { ...(obj[keyVal[0]] || {}), ...keyVal[1] }
-  }), {});
+  let result = {};
+
+  for (let cssRule of cssRules) {
+    if (cssRule.selectorText) {
+      for (let sel of (cssRule.selectorText.split(/\s*,\s*/))) {
+        const [key, val] = replaceSelector(cssRule, sel, options);
+        result = {
+          ...result,
+          [key]: { ...(result[key] || {}), ...val }
+        };
+      }
+    }
+  }
+
+  for (let cssRule of cssRules) {
+    if (cssRule.media) {
+      for (let i = 0; i < cssRule.media.length; i++) {
+        let media = cssRule.media[i];
+        for (let subRule of cssRule.cssRules) {
+          for (let sel of (subRule.selectorText.split(/\s*,\s*/))) {
+            const [key, val] = replaceSelector(subRule, sel, options);
+            const mediaKey = `@media ${media}`;
+            result = {
+              ...result,
+              [mediaKey]: {
+                ...(result[mediaKey] || {}),
+                [key]: {
+                  ...((result[mediaKey] || {})[key] || {}),
+                  ...val
+                }
+              }
+            };
+          }
+        }
+      }
+    }
+  }
+
+  return result;
 }
