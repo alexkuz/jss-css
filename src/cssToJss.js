@@ -11,7 +11,7 @@ function reduceKeyframeRules(rules, rule) {
   };
 }
 
-function replaceSelector(cssRule, sel, options) {
+function replaceSelector(cssRule, sel, options = {}) {
   const isPureClassName = /^[\.\w\-]+$/.test(sel);
   if (!isPureClassName) {
     let className = sel.match(/(\.?[\w\-]+)/)[1];
