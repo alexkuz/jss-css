@@ -1,8 +1,14 @@
-import mapValues from 'lodash/object/mapValues';
 import cssom from 'cssom';
 
-function getStyles(rule) {
-  return mapValues(rule.style._importants, (val, key) => rule.style[key]);
+function mapStyles(rule) {
+  return Array.from(rule.style).reduce((style, key) => ({ ...style, [key]: rule.style[key] }), {});
+}
+
+function reduceKeyframeRules(rules, rule) {
+  return {
+    ...rules,
+    [rule.keyText]: mapStyles(rule)
+  };
 }
 
 function replaceSelector(cssRule, sel, options) {
@@ -15,11 +21,11 @@ function replaceSelector(cssRule, sel, options) {
     }
 
     return [className, {
-      [sel.replace(classNameRe, '&')]: getStyles(cssRule)
+      [sel.replace(classNameRe, '&')]: mapStyles(cssRule)
     }];
   }
 
-  return [ sel.replace(/^\./, ''), getStyles(cssRule) ];
+  return [ sel.replace(/^\./, ''), mapStyles(cssRule) ];
 }
 
 export default function cssToJss(str, options) {
@@ -40,9 +46,8 @@ export default function cssToJss(str, options) {
   }
 
   for (let cssRule of cssRules) {
-    if (cssRule.media) {
-      for (let i = 0; i < cssRule.media.length; i++) {
-        let media = cssRule.media[i];
+    if (cssRule.constructor.name === 'CSSMediaRule') {
+      for (let media of Array.from(cssRule.media)) {
         for (let subRule of cssRule.cssRules) {
           for (let sel of (subRule.selectorText.split(/\s*,\s*/))) {
             const [key, val] = replaceSelector(subRule, sel, options);
@@ -60,6 +65,12 @@ export default function cssToJss(str, options) {
           }
         }
       }
+    } else if (cssRule.constructor.name === 'CSSKeyframesRule') {
+      const keyframeKey = `@keyframes ${cssRule.name}`;
+      result = {
+        ...result,
+        [keyframeKey]: cssRule.cssRules.reduce(reduceKeyframeRules, {})
+      };
     }
   }
 
