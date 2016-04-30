@@ -9,7 +9,7 @@ npm i -S jss-css
 
 ## Examples
 
-```
+```js
 import css from 'jss-css/lib/css';
 import useSheet from 'react-jss';
 
@@ -29,7 +29,7 @@ class Cell extends Component {
 
 or:
 
-```
+```js
 import useSheet from 'jss-css/lib/useSheet';
 
 @useSheet(`
@@ -48,7 +48,7 @@ class Cell extends Component {
 
 These css declarations will be converted into JSS object:
 
-```
+```js
 {
   'cell': {
     'padding': '1rem'
@@ -66,7 +66,7 @@ These css declarations will be converted into JSS object:
 
 Also, if you are using [Babel](https://babeljs.io/), you can use this [Babel Plugin](https://github.com/alexkuz/babel-plugin-jss-css) to avoid runtime compilation (`/* jss-css */` comment is neccessary):
 
-```
+```js
 import useSheet from 'jss-css/lib/useSheet';
 
 @useSheet(`
