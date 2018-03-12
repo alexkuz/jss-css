@@ -53,7 +53,7 @@ These css declarations will be converted into JSS object:
   'cell': {
     'padding': '1rem'
   },
- 
+
   'separator': {
     '& ~ &': {
       'border-left': '1px solid #DDD'
@@ -64,7 +64,9 @@ These css declarations will be converted into JSS object:
 
 (for the nested styles to work you'll need to use [jss-nested](https://github.com/jsstyles/jss-nested) plugin)
 
-Also, if you are using [Babel](https://babeljs.io/), you can use this [Babel Plugin](https://github.com/alexkuz/babel-plugin-jss-css) to avoid runtime compilation (`/* jss-css */` comment is neccessary):
+### With Babel
+
+If you are using [Babel](https://babeljs.io/), you can use this [Babel Plugin](https://github.com/alexkuz/babel-plugin-jss-css) to avoid runtime compilation (`/* jss-css */` comment is neccessary):
 
 ```js
 import useSheet from 'jss-css/lib/useSheet';
@@ -85,3 +87,7 @@ class Cell extends Component {
 ```
 
 **Note**: in this case, you cannot use variables in the template string (at least for now).
+
+### With Webpack
+
+If you are using [Webpack](https://webpack.js.org/), you can use this [webpack loader](https://github.com/Graham42/jss-css-loader) to write your styles in separate files to get css autocomplete/intellisense.
